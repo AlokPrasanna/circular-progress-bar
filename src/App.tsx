@@ -6,7 +6,7 @@ function App() {
   return (
     <div className='body'>
       <CircularProgressBar 
-        CurrentValue={100} 
+        CurrentValue={90} 
         StartValue={0} 
         EndValue={100} 
         LowValue={20} 

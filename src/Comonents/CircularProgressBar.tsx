@@ -25,6 +25,8 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   const [ShowCurrentValue, setCurrentValue] = useState(0);
   const [BarColor, setBarColor] = useState('#e74c3c');
   const [DashOffSet,setDashOffSet] = useState(0);
+
+  const IntervalTime:number = 30; // here use mili seconds
   //const [AnimationTime,setAnimationTime] = useState(30);
 
   useEffect(() => {
@@ -34,18 +36,35 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   }, [CurrentValue]);
 
   const HandelCurrentValue = (CurrentValue: number) => {
-    setCurrentValue(0);
-    let Count:number = 0;
-    const IntervalId:number = setInterval(() => {
-      if(Count == CurrentValue ){
-        clearInterval(IntervalId);
-      }else{
-        Count += 1;
-        setCurrentValue(Count);
-        UpdateBarColor(Count);
-      }
-    },30)
-  };
+    setCurrentValue(StartValue);
+    const Steps = Math.abs(CurrentValue - StartValue);
+    const Increment = (CurrentValue - StartValue) / Steps;
+    const IntervalId: number = setInterval(() => {
+        setCurrentValue(prevValue => {
+          const NewValue = prevValue + Increment;
+            UpdateBarColor(NewValue); // Update color based on the new value
+            return NewValue >= CurrentValue ? CurrentValue : NewValue; 
+        });
+        if (ShowCurrentValue >= CurrentValue) {
+            clearInterval(IntervalId);
+        }
+        UpdateBarColor(ShowCurrentValue);
+    }, IntervalTime);
+};
+
+  // const HandelCurrentValue = (CurrentValue: number) => {
+  //   setCurrentValue(0);
+  //   let Count:number = 0;
+  //   const IntervalId:number = setInterval(() => {
+  //     if(Count == CurrentValue ){
+  //       clearInterval(IntervalId);
+  //     }else{
+  //       Count += 1;
+  //       setCurrentValue(Count);
+  //       UpdateBarColor(Count);
+  //     }
+  //   },IntervalTime)
+  // };
 
   // const CalculateAnimationTime = (value:number) => {
   //   const IntervalTime = 25; 
