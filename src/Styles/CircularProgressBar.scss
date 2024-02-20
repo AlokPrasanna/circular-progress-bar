@@ -19,8 +19,7 @@
     width: 200px;
     border-radius: 50%;
     padding: 20px;
-    //box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15) , -6px -6px 10px -1px rgba(255,255,255,0.7)
-                ;
+    box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15) , -6px -6px 10px -1px rgba(0,0,0,0.15);
 }
 
 .inner{
@@ -36,13 +35,20 @@
 }
 
 .current-value{
+    font-size:1rem;
     font-weight: 600;
-    color: #555;
+}
+
+.title{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
 }
 
 circle{
     fill: none;
     stroke: var(--BarColor);
+    border: var(--BarColor);
     stroke-width: 20px;
     stroke-dasharray: 540;
     stroke-dashoffset: 540;
@@ -56,8 +62,8 @@ svg{
 }
 
 .icon{
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
 }
 
 @keyframes anim {

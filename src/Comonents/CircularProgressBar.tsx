@@ -26,6 +26,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   Icon,
   Title
 }) => {
+  const [ScaleValue,setScaleValue] = useState(0);
   const [ShowCurrentValue, setCurrentValue] = useState(0);
   const [BarColor, setBarColor] = useState('#e74c3c');
   const [DashOffSet,setDashOffSet] = useState(0);
@@ -34,63 +35,48 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   //const [AnimationTime,setAnimationTime] = useState(30);
 
   useEffect(() => {
-    HandelCurrentValue(CurrentValue);
-    UpdateDashOffset(CurrentValue);
-    //CalculateAnimationTime(CurrentValue);
-  }, [CurrentValue]);
+    setCurrentValue(CurrentValue);
+  }, [StartValue]);
 
-  const HandelCurrentValue = (CurrentValue: number) => {
-    setCurrentValue(StartValue);
-    const Steps = Math.abs(CurrentValue - StartValue);
-    const Increment = (CurrentValue - StartValue) / Steps;
+  useEffect(() => {
+    CalCulateScal(StartValue, EndValue,CurrentValue);
+  },[CurrentValue]);
+
+  useEffect(() => {
+    HandelScaleValue(ScaleValue);
+  }, [ScaleValue]);
+
+  const HandelScaleValue = (value: number) => {
+    if (value === ShowCurrentValue) return; // Exit if the value hasn't changed
+    const Steps = Math.abs(value - ShowCurrentValue);
+    const Increment = (value - ShowCurrentValue) / Steps;
     const IntervalId: number = setInterval(() => {
-        setCurrentValue(prevValue => {
-          const NewValue = prevValue + Increment;
-            UpdateBarColor(NewValue); // Update color based on the new value
-            return NewValue >= CurrentValue ? CurrentValue : NewValue; 
-        });
-        if (ShowCurrentValue >= CurrentValue) {
-            clearInterval(IntervalId);
-        }
-        UpdateBarColor(ShowCurrentValue);
+      setCurrentValue(prevValue => {
+        const NewValue = Math.floor(prevValue + Increment + StartValue);
+        UpdateBarColor(NewValue);
+        return NewValue >= value ? value : NewValue; 
+      });
+      if (ShowCurrentValue >= value) {
+        clearInterval(IntervalId);
+      }
     }, IntervalTime);
-};
+  };
 
-  // const HandelCurrentValue = (CurrentValue: number) => {
-  //   setCurrentValue(0);
-  //   let Count:number = 0;
-  //   const IntervalId:number = setInterval(() => {
-  //     if(Count == CurrentValue ){
-  //       clearInterval(IntervalId);
-  //     }else{
-  //       Count += 1;
-  //       setCurrentValue(Count);
-  //       UpdateBarColor(Count);
-  //     }
-  //   },IntervalTime)
-  // };
-
-  // const CalculateAnimationTime = (value:number) => {
-  //   const IntervalTime = 25; 
-  //   const AnimationDuration = (value / 100) * IntervalTime * 1000;
-  //   setAnimationTime(AnimationDuration);
-  // }
-
-  const UpdateDashOffset = (value:number) => {
-    const percentage = value /100;
-  // Calculate the dash offset
-  const DashOffCal = Math.floor(472 - 472 * percentage);
-
+  useEffect(() => {
+    const percentage = ScaleValue / 100;
+    const DashOffCal = Math.floor(472 - 472 * percentage);
     setDashOffSet(DashOffCal);
-  }
+  }, [ScaleValue]);
 
   const UpdateBarColor = (value: number) => {
     let color: string;
+
+    //const MidPoint = ((LowValue +HighValue)/2 ) + LowValue;
   
     if (value >= HighValue) {
       // Above or equal to HighValue, set to green
       color = '#2ecc71';
-    } else if (value <= LowValue) {
+    } else if (value <= LowValue && value >= EndValue) {
       // Below or equal to LowValue, set to red
       color = '#e74c3c';
     } else {
@@ -106,15 +92,25 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
     setBarColor(color);
   };
 
-  console.log(DashOffSet);
+  const CalCulateScal = (Start:number, End:number, value:number) => {
+      const Range  = 100/(End - Start);
+      const div = (value-Start)*Range;
+
+      setScaleValue(div);
+  }
+  console.log(ShowCurrentValue);
+   //console.log(BarColor);
+  //console.log(DashOffSet);
 
   return (
     <div className="progress-bar">
       <div className="outer">
         <div className="inner" style={{ backgroundColor: InnerColor , border:InnerColor }}>
           <div>{Icon ? <img src={Icon} className='icon'/> : " "}</div>
-          <div>{Title}</div>
-          <div className="current-value" style={{color:TextColor}}>{ShowCurrentValue ? ShowCurrentValue : "0.0"}{Units ? Units: "?"}</div>
+          <div className='title' style={{color: TextColor ? TextColor : "white" }}>{Title}</div>
+          <div className="current-value" style={{color: TextColor ? TextColor : "white" }}>{ShowCurrentValue !== null ? 
+             (ShowCurrentValue % 1 === 0 ? ShowCurrentValue.toFixed(0) : ShowCurrentValue.toFixed(2)) : "0"}
+             {Units ? Units: "?"}</div>
         </div>
       </div>  
       <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="200px" height="200px">
