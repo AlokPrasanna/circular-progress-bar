@@ -10,6 +10,8 @@ interface CircularProgressBarProps {
   Units: string;
   InnerColor:string;
   TextColor:string;
+  Icon:string;
+  Title:string;
 }
 
 const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
@@ -20,7 +22,9 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   HighValue,
   Units,
   InnerColor,
-  TextColor
+  TextColor,
+  Icon,
+  Title
 }) => {
   const [ShowCurrentValue, setCurrentValue] = useState(0);
   const [BarColor, setBarColor] = useState('#e74c3c');
@@ -108,11 +112,13 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
     <div className="progress-bar">
       <div className="outer">
         <div className="inner" style={{ backgroundColor: InnerColor , border:InnerColor }}>
-          <div className="current-value" style={{color:TextColor}}>{ShowCurrentValue}{Units}</div>
+          <div>{Icon ? <img src={Icon} className='icon'/> : " "}</div>
+          <div>{Title}</div>
+          <div className="current-value" style={{color:TextColor}}>{ShowCurrentValue ? ShowCurrentValue : "0.0"}{Units ? Units: "?"}</div>
         </div>
-      </div>
-      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160px" height="160px">
-        <circle cx="80" cy="80" r="70" strokeLinecap="round" strokeDasharray="472" style={{ '--BarColor': BarColor, '--DashOffSet': DashOffSet } as React.CSSProperties} />
+      </div>  
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="200px" height="200px">
+        <circle cx="100" cy="100" r="90" strokeLinecap="round" strokeDasharray="472" style={{ '--BarColor': BarColor, '--DashOffSet': DashOffSet } as React.CSSProperties} />
       </svg>
     </div>
   );
