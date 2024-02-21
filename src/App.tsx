@@ -1,5 +1,5 @@
 import './App.css';
-import CircularProgressBar from './Comonents/CircularProgressBar';
+import CircularProgressBar from './Comonents/CircularProgressBar/CircularProgressBar';
 
 function App() {
 
@@ -7,9 +7,9 @@ function App() {
     <div className='body'>
       <div>
         <CircularProgressBar 
-          CurrentValue={4.7} 
+          CurrentValue={5} 
           StartValue={0}
-          EndValue={5} 
+          EndValue={100} 
           LowValue={20} 
           HighValue={80} 
           Units={"%"} 
@@ -20,9 +20,9 @@ function App() {
       </div>
       <div>
         <CircularProgressBar 
-          CurrentValue={12} 
-          StartValue={0} 
-          EndValue={30} 
+          CurrentValue={75.6} 
+          StartValue={10} 
+          EndValue={100} 
           LowValue={20} 
           HighValue={80} 
           Units={" "} 
@@ -35,7 +35,7 @@ function App() {
 
       <div>
         <CircularProgressBar 
-          CurrentValue={23} 
+          CurrentValue={50} 
           StartValue={0} 
           EndValue={50} 
           LowValue={20} 
@@ -46,21 +46,6 @@ function App() {
           Icon={"/Icons/voltage1.svg"}
           Title={"Voltage"}/>
       </div>
-
-  <div>
-    <CircularProgressBar 
-            CurrentValue={20} 
-            StartValue={0} 
-            EndValue={100} 
-            LowValue={20} 
-            HighValue={80} 
-            Units={"Kg"} 
-            InnerColor={"#3498db"} 
-            TextColor={"#ecf0f1"}
-            Icon={"/Icons/weight1.svg"}
-            Title={"Weight"}/>
-  </div>
-
     </div>
   )
 }

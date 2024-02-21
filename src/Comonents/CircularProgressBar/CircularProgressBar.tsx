@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../Styles/CircularProgressBar.scss';
+import './circularProgressBar.scss';
 
 interface CircularProgressBarProps {
   CurrentValue: number;
@@ -26,7 +26,6 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   Icon,
   Title
 }) => {
-  const [ScaleValue,setScaleValue] = useState(0);
   const [ShowCurrentValue, setCurrentValue] = useState(0);
   const [BarColor, setBarColor] = useState('#e74c3c');
   const [DashOffSet,setDashOffSet] = useState(0);
@@ -35,38 +34,46 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   //const [AnimationTime,setAnimationTime] = useState(30);
 
   useEffect(() => {
-    setCurrentValue(CurrentValue);
-  }, [StartValue]);
+    setCurrentValue(StartValue);
+  }, []);
 
   useEffect(() => {
     CalCulateScal(StartValue, EndValue,CurrentValue);
-  },[CurrentValue]);
+  },[]);
 
   useEffect(() => {
-    HandelScaleValue(ScaleValue);
-  }, [ScaleValue]);
+    HandelScaleValue(CurrentValue);
+  }, []);
+
+
 
   const HandelScaleValue = (value: number) => {
-    if (value === ShowCurrentValue) return; // Exit if the value hasn't changed
+    if (value === ShowCurrentValue) {
+      return;
+    }
     const Steps = Math.abs(value - ShowCurrentValue);
     const Increment = (value - ShowCurrentValue) / Steps;
     const IntervalId: number = setInterval(() => {
       setCurrentValue(prevValue => {
-        const NewValue = Math.floor(prevValue + Increment + StartValue);
-        UpdateBarColor(NewValue);
-        return NewValue >= value ? value : NewValue; 
+        const NewValue = prevValue + Increment;
+        console.log(NewValue);
+        if (Math.abs(NewValue - value) <= Math.abs(Increment)) {
+          clearInterval(IntervalId);
+          return value;
+        }
+        return NewValue;
       });
-      if (ShowCurrentValue >= value) {
-        clearInterval(IntervalId);
-      }
     }, IntervalTime);
+  
+    return () => clearInterval(IntervalId);
   };
+  
 
-  useEffect(() => {
-    const percentage = ScaleValue / 100;
+  const CalDashOffValue = (scalevalue:number) => {
+    const percentage = scalevalue / 100;
     const DashOffCal = Math.floor(472 - 472 * percentage);
     setDashOffSet(DashOffCal);
-  }, [ScaleValue]);
+  }
 
   const UpdateBarColor = (value: number) => {
     let color: string;
@@ -94,11 +101,11 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
 
   const CalCulateScal = (Start:number, End:number, value:number) => {
       const Range  = 100/(End - Start);
-      const div = (value-Start)*Range;
-
-      setScaleValue(div);
+      const div = (value-Start)*Range; 
+        UpdateBarColor(div);
+        CalDashOffValue(div);
   }
-  console.log(ShowCurrentValue);
+  //console.log(ShowCurrentValue);
    //console.log(BarColor);
   //console.log(DashOffSet);
 
@@ -108,8 +115,8 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
         <div className="inner" style={{ backgroundColor: InnerColor , border:InnerColor }}>
           <div>{Icon ? <img src={Icon} className='icon'/> : " "}</div>
           <div className='title' style={{color: TextColor ? TextColor : "white" }}>{Title}</div>
-          <div className="current-value" style={{color: TextColor ? TextColor : "white" }}>{ShowCurrentValue !== null ? 
-             (ShowCurrentValue % 1 === 0 ? ShowCurrentValue.toFixed(0) : ShowCurrentValue.toFixed(2)) : "0"}
+          <div className="current-value" style={{color: TextColor ? TextColor : "white" }}>{ShowCurrentValue ? 
+             (ShowCurrentValue - Math.floor(ShowCurrentValue) === 0 ? ShowCurrentValue.toFixed(0) : ShowCurrentValue.toFixed(2)) : "0"}
              {Units ? Units: "?"}</div>
         </div>
       </div>  
