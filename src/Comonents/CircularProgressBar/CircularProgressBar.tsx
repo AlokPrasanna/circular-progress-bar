@@ -71,7 +71,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
 
   const CalDashOffValue = (scalevalue:number) => {
     const percentage = scalevalue / 100;
-    const DashOffCal = Math.floor(472 - 472 * percentage);
+    const DashOffCal = Math.floor(480 - 480 * percentage);
     setDashOffSet(DashOffCal);
   }
 
@@ -114,14 +114,16 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
       <div className="outer">
         <div className="inner" style={{ backgroundColor: InnerColor , border:InnerColor }}>
           <div>{Icon ? <img src={Icon} className='icon'/> : " "}</div>
-          <div className='title' style={{color: TextColor ? TextColor : "white" }}>{Title}</div>
-          <div className="current-value" style={{color: TextColor ? TextColor : "white" }}>{ShowCurrentValue ? 
-             (ShowCurrentValue - Math.floor(ShowCurrentValue) === 0 ? ShowCurrentValue.toFixed(0) : ShowCurrentValue.toFixed(2)) : "0"}
-             {Units ? Units: "?"}</div>
+          <div className='title' style={{color: TextColor ? TextColor : "#ffffff" }}>{Title}</div>
+          <div className="current-value" style={{color: TextColor ? TextColor : "#ffffff" }}>{ShowCurrentValue ? 
+             (ShowCurrentValue - Math.floor(ShowCurrentValue) === 0 ? parseInt(ShowCurrentValue.toFixed(0)) < 10
+             ? "0" + ShowCurrentValue.toFixed(0)
+             : ShowCurrentValue.toFixed(0) : ShowCurrentValue.toFixed(1)) : "0"}
+             {Units ? Units: null}</div>
         </div>
       </div>  
-      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="200px" height="200px">
-        <circle cx="100" cy="100" r="90" strokeLinecap="round" strokeDasharray="472" style={{ '--BarColor': BarColor, '--DashOffSet': DashOffSet } as React.CSSProperties} />
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="180px" height="180px">
+        <circle cx="90" cy="90" r="80" strokeLinecap="round" strokeDasharray="480" style={{ '--BarColor': BarColor, '--DashOffSet': DashOffSet } as React.CSSProperties} />
       </svg>
     </div>
   );

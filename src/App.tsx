@@ -20,9 +20,9 @@ function App() {
       </div>
       <div>
         <CircularProgressBar 
-          CurrentValue={75.6} 
+          CurrentValue={125.36} 
           StartValue={10} 
-          EndValue={100} 
+          EndValue={150} 
           LowValue={20} 
           HighValue={80} 
           Units={" "} 
