@@ -1,34 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import CircularProgressBar from './Comonents/CircularProgressBar/CircularProgressBar';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
+    <div className='body'>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <CircularProgressBar 
+          CurrentValue={100} 
+          StartValue={0}
+          EndValue={100} 
+          LowValue={20} 
+          HighValue={80} 
+          Units={"%"} 
+          InnerColor={"#3498db"} 
+          TextColor={"#ecf0f1"}
+          Icon={"/Icons/battery1.svg"}
+          Title={"Battery Persentage"}/>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div>
+        <CircularProgressBar 
+          CurrentValue={125.36} 
+          StartValue={10} 
+          EndValue={150} 
+          LowValue={20} 
+          HighValue={80} 
+          Units={" "} 
+          InnerColor={"#3498db"} 
+          TextColor={"#000000"}
+          Icon={"/Icons/items1.svg"}
+          Title={"Items Count"}/>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+
+      <div>
+        <CircularProgressBar 
+          CurrentValue={50} 
+          StartValue={0} 
+          EndValue={50} 
+          LowValue={20} 
+          HighValue={80} 
+          Units={"V"} 
+          InnerColor={"#3498db"} 
+          TextColor={"#ecf0f1"}
+          Icon={"/Icons/voltage1.svg"}
+          Title={"Voltage"}/>
+      </div>
+    </div>
   )
 }
 
